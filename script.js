@@ -1,9 +1,17 @@
+// Cache DOM elements
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-
 const menuContainer = document.getElementById('menuContainer');
 const gameContainer = document.getElementById('gameContainer');
 const startButton = document.getElementById('startButton');
+const scoreElement = document.getElementById('score');
+const messageElement = document.getElementById('message');
+const timerElement = document.getElementById('timer');
+
+// Use a single event listener for key events
+let keys = {};
+window.addEventListener('keydown', (e) => keys[e.key] = true);
+window.addEventListener('keyup', (e) => keys[e.key] = false);
 
 let gameStarted = false;
 let score = 0;
@@ -11,14 +19,13 @@ let componentsCollected = 0;
 let timeLeft = 60;
 let gameOver = false;
 let currentLevel = 0;
-let keys = {};
 
 const player = {
     x: 50,
     y: 500,
     width: 30,
     height: 30,
-    speed: 5,
+    speed: 2,
     color: 'yellow',
     vy: 0,
     jumping: false,
@@ -33,7 +40,7 @@ const levels = [
             { x: 300, y: 250, width: 20, height: 20, color: 'blue', collected: false, type: 'cable'}
         ],
         barrels: [
-            { x: 800, y: 450, width: 30, height: 30, speed: -3 }
+            { x: 800, y: 450, width: 30, height: 30, speed: -3, initialX: 800 }
 
         ],
         platforms: [
@@ -130,6 +137,7 @@ const levels = [
         lightBulb: { x: 400, y: 50, width: 30, height: 30, isOn: false }
     }
 ];
+
 const ladders = [
     { x: 200, y: 300, width: 20, height: 100, color: 'red' },
     { x: 500, y: 200, width: 20, height: 100, color: 'red' }
@@ -139,33 +147,37 @@ canvas.width = 800;
 canvas.height = 600;
 
 startButton.addEventListener('click', startGame);
-window.addEventListener('keydown', (e) => (keys[e.key] = true));
-window.addEventListener('keyup', (e) => (keys[e.key] = false));
+
+let lastTime = 0;
+function gameLoop(timestamp) {
+    const deltaTime = timestamp - lastTime;
+    lastTime = timestamp;
+
+    if (gameStarted) {
+        movePlayer(deltaTime);
+        moveBarrels(deltaTime);
+        checkCollisions();
+        draw();
+    }
+
+    requestAnimationFrame(gameLoop);
+}
 
 function startGame() {
     menuContainer.style.display = 'none';
     gameContainer.style.display = 'block';
     startTimer();
     gameStarted = true;
-    setInterval(gameLoop, 20);
+    requestAnimationFrame(gameLoop);
 }
 
-function gameLoop() {
-    if (gameStarted) {
-        movePlayer();
-        moveBarrels();
-        checkCollisions();
-        draw();
-    }
-}
-
-function movePlayer() {
+function movePlayer(deltaTime) {
     if (keys['ArrowLeft']) player.x -= player.speed;
     if (keys['ArrowRight']) player.x += player.speed;
 
     if (!player.onLadder) {
         player.y += player.vy;
-        player.vy += 0.5;
+        player.vy += 0.3;
     }
 
     levels[currentLevel].platforms.forEach(platform => {
@@ -199,7 +211,7 @@ function movePlayer() {
     }
 }
 
-function moveBarrels() {
+function moveBarrels(deltaTime) {
     levels[currentLevel].barrels.forEach(barrel => {
         barrel.x += barrel.speed;
         if (barrel.x < -30) barrel.x = canvas.width;
@@ -217,6 +229,7 @@ function checkBarrelCollision() {
         if (isColliding(player, barrel)) {
             document.getElementById('loseSound').play();
             alert('¡Perdiste! Un barril te atrapó.');
+            barrel.x = barrel.initialX; // Reiniciar la posición del barril
             resetGame();
         }
     });
@@ -228,14 +241,14 @@ function checkCollection() {
             component.collected = true;
             componentsCollected++;
             score += 100;
-            document.getElementById('score').textContent = score;
+            updateScore();
             document.getElementById('collectSound').play();
         }
     });
 
     if (componentsCollected === levels[currentLevel].components.length) {
         levels[currentLevel].lightBulb.isOn = true;
-        document.getElementById('message').textContent = '¡Todos los componentes recogidos! Enciende el foco!';
+        updateMessage('¡Todos los componentes recogidos! Enciende el foco!');
     }
 }
 
@@ -424,8 +437,8 @@ function resetGame() {
     componentsCollected = 0;
     score = 0;
     timeLeft = 60;
-    document.getElementById('score').textContent = score;
-    document.getElementById('message').textContent = '';
+    updateScore();
+    updateMessage('');
     levels[currentLevel].components.forEach(component => component.collected = false);
     levels[currentLevel].lightBulb.isOn = false;
 }
@@ -434,11 +447,23 @@ function startTimer() {
     const timerInterval = setInterval(() => {
         if (timeLeft > 0) {
             timeLeft--;
-            document.getElementById('timer').textContent = timeLeft;
+            updateTimer();
         } else {
             clearInterval(timerInterval);
             alert('¡Tiempo agotado! Perdiste.');
             resetGame();
         }
     }, 1000);
+}
+
+function updateScore() {
+    scoreElement.textContent = score;
+}
+
+function updateMessage(message) {
+    messageElement.textContent = message;
+}
+
+function updateTimer() {
+    timerElement.textContent = timeLeft;
 }
