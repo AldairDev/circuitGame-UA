@@ -1,0 +1,106 @@
+/* Estilos generales */
+body {
+    font-family: 'Press Start 2P', cursive;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+/* Fondo de imagen para el menú */
+.menu-background {
+    background-image: url('https://img.freepik.com/vector-gratis/photocall-juegos-neon-dibujado-mano_23-2149860761.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 300px;
+    border: 3px solid #fff;
+    box-shadow: 0px 0px 20px #f00, 0px 0px 30px #00f inset;
+    width: 100%;
+    max-width: 1500px;
+    border-radius: 8px;
+    animation: glow 3s infinite alternate;
+}
+
+
+@keyframes glow {
+    from {
+        box-shadow: 0px 0px 20px #f00, 0px 0px 30px #00f inset;
+    }
+    to {
+        box-shadow: 0px 0px 20px #00f, 0px 0px 30px #f00 inset;
+    }
+}
+
+/* Título con animación de parpadeo */
+.title {
+    font-size: 2em;
+    color: #ff6600;
+    margin: 0;
+    padding: 10px 0;
+    text-shadow: 3px 3px #000;
+    animation: blink 1.5s infinite alternate;
+}
+
+@keyframes blink {
+    0%, 100% { color: #ff6600; }
+    50% { color: #ffff00; }
+}
+
+/* Texto de instrucciones */
+.instructions {
+    font-size: 1em;
+    margin: 10px 0;
+    color: #ccc;
+}
+
+/* Botón de inicio con animación */
+.start-button {
+    font-size: 1.5em; /* Aumenta el tamaño del texto */
+    color: #fff;
+    background-color: #ff0000;
+    border: 2px solid #ff6600; /* Añade un borde de color para mayor visibilidad */
+    padding: 20px 40px; /* Aumenta el relleno del botón */
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    box-shadow: 0px 8px #cc0000;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.start-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0px 10px #990000;
+    background-color: #cc0000;
+}
+/* Contenedor del juego */
+#gameContainer {
+
+    display: none; /* Oculto hasta que se inicie el juego */
+    text-align: center;
+    font-family: 'Press Start 2P', sans-serif;
+}
+
+canvas {
+    background-color: #1e1e1e;
+    border: 3px solid #fff;
+    box-shadow: 0px 0px 10px #00ff00;
+}
+
+/* Puntuación y temporizador */
+#score, #timer {
+    font-size: 1.5em;
+    color: #ffcc00;
+}
+
+#message {
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 1.2em;
+}
