@@ -18,9 +18,19 @@
 </div>
 
 <!-- Contenedor del Juego -->
-<div id="gameContainer"class="menu-background">
+<div id="gameContainer" class="menu-background">
     <h1>Electric Hero - ¡Completa el Circuito!</h1>
-    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="gameContent">
+        <div id="legendContainer">
+            <h2>Orden de Captura</h2>
+            <ul id="legendList"></ul>
+        </div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="collectedContainer">
+            <h2>Componentes Recogidos</h2>
+            <ul id="collectedList"></ul>
+        </div>
+    </div>
     <p id="message"></p>
     <p>Puntuación: <span id="score">0</span></p>
     <p>Tiempo: <span id="timer">60</span> segundos</p>

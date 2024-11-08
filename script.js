@@ -32,12 +32,14 @@ const player = {
     onLadder: false
 };
 
+let currentComponentIndex = 0;
+
 const levels = [
     {
         // Nivel 1
         components: [
-            { x: 600, y: 300, width: 20, height: 20, color: 'red', collected: false, type: 'battery' },
-            { x: 300, y: 250, width: 20, height: 20, color: 'blue', collected: false, type: 'cable'}
+            { x: 600, y: 300, width: 20, height: 20, color: 'red', collected: false, type: 'battery', order: 0 },
+            { x: 300, y: 250, width: 20, height: 20, color: 'blue', collected: false, type: 'cable', order: 1 }
         ],
         barrels: [
             { x: 800, y: 450, width: 30, height: 30, speed: -3, initialX: 800 }
@@ -54,9 +56,9 @@ const levels = [
     {
         // Nivel 2
         components: [
-            { x: 700, y: 100, width: 20, height: 20, color: 'red', collected: false,type: 'battery' },
-            { x: 400, y: 250, width: 20, height: 20, color: 'blue', collected: false,type: 'switch' },
-            { x: 250, y: 350, width: 20, height: 20, color: 'green', collected: false,type: 'cable' } // Centramos el objeto
+            { x: 700, y: 100, width: 20, height: 20, color: 'red', collected: false,type: 'battery', order: 0 },
+            { x: 250, y: 350, width: 20, height: 20, color: 'green', collected: false,type: 'cable', order: 1 }, // Centramos el objeto
+            { x: 400, y: 250, width: 20, height: 20, color: 'blue', collected: false,type: 'resistor', order: 2 }
         ],
         barrels: [
             { x: 800, y: 520, width: 30, height: 50, speed: -3 },
@@ -73,10 +75,10 @@ const levels = [
     {
         // Nivel 3
         components: [
-            { x: 700, y: 100, width: 20, height: 20, color: 'red', collected: false,type: 'battery' },
-            { x: 400, y: 250, width: 20, height: 20, color: 'blue', collected: false,type: 'switch' },
-            { x: 150, y: 450, width: 20, height: 20, color: 'green', collected: false,type: 'motor' },
-            { x: 500, y: 350, width: 20, height: 20, color: 'orange', collected: false,type: 'cable'}
+            { x: 700, y: 100, width: 20, height: 20, color: 'red', collected: false,type: 'battery', order: 0  },
+            { x: 500, y: 350, width: 20, height: 20, color: 'orange', collected: false,type: 'cable', order: 1 },
+            { x: 400, y: 250, width: 20, height: 20, color: 'blue', collected: false,type: 'resistor', order: 2 },
+            { x: 150, y: 450, width: 20, height: 20, color: 'green', collected: false,type: 'capacitor', order: 3  }
         ],
         barrels: [
             { x: 800, y: 450, width: 30, height: 30, speed: -3 },//abajo
@@ -97,10 +99,11 @@ const levels = [
     {
         // Nivel 4 - Mayor dificultad con barriles rápidos y más componentes
         components: [
-            { x: 650, y: 150, width: 20, height: 20, color: 'red', collected: false,type: 'battery' },
-            { x: 300, y: 350, width: 20, height: 20, color: 'blue', collected: false,type: 'switch' },
-            { x: 200, y: 250, width: 20, height: 20, color: 'green', collected: false,type: 'motor' },
-            { x: 500, y: 450, width: 20, height: 20, color: 'yellow', collected: false,type: 'cable' }
+            { x: 650, y: 150, width: 20, height: 20, color: 'red', collected: false,type: 'battery', order: 0 },
+            { x: 300, y: 350, width: 20, height: 20, color: 'blue', collected: false,type: 'resistor', order: 2 },
+            { x: 200, y: 250, width: 20, height: 20, color: 'green', collected: false,type: 'capacitor', order: 3 },
+            { x: 400, y: 250, width: 20, height: 20, color: 'blue', collected: false,type: 'switch', order: 4 },
+            { x: 500, y: 450, width: 20, height: 20, color: 'yellow', collected: false,type: 'cable', order: 1 }
         ],
         barrels: [
             { x: 800, y: 450, width: 30, height: 30, speed: -5 }, // Barril rápido
@@ -117,11 +120,12 @@ const levels = [
     {
         // Nivel 5 - Dificultad máxima con múltiples barriles y mayor velocidad
         components: [
-            { x: 750, y: 120, width: 20, height: 20, color: 'red', collected: false,type: 'battery' },
-            { x: 450, y: 250, width: 20, height: 20, color: 'blue', collected: false,type: 'switch'  },
-            { x: 200, y: 450, width: 20, height: 20, color: 'green', collected: false,type: 'motor' },
-            { x: 350, y: 200, width: 20, height: 20, color: 'purple', collected: false,type: 'battery' },
-            { x: 100, y: 400, width: 20, height: 20, color: 'orange', collected: false,type: 'cable' }
+            { x: 750, y: 120, width: 20, height: 20, color: 'red', collected: false,type: 'battery', order: 0  },
+            { x: 450, y: 250, width: 20, height: 20, color: 'blue', collected: false,type: 'resistor', order: 2   },
+            { x: 200, y: 450, width: 20, height: 20, color: 'green', collected: false,type: 'capacitor', order: 3  },
+            { x: 350, y: 200, width: 20, height: 20, color: 'purple', collected: false,type: 'switch', order: 4  },
+            { x: 100, y: 400, width: 20, height: 20, color: 'orange', collected: false,type: 'cable', order: 1 },
+            { x: 500, y: 450, width: 20, height: 20, color: 'yellow', collected: false,type: 'motor', order: 5 }
         ],
         barrels: [
             { x: 800, y: 450, width: 30, height: 30, speed: -6 },
@@ -162,13 +166,30 @@ function gameLoop(timestamp) {
 
     requestAnimationFrame(gameLoop);
 }
+const legendList = document.getElementById('legendList');
 
 function startGame() {
     menuContainer.style.display = 'none';
     gameContainer.style.display = 'block';
+    updateLegend();
     startTimer();
     gameStarted = true;
     requestAnimationFrame(gameLoop);
+}
+
+function updateLegend() {
+    legendList.innerHTML = '';
+    levels[currentLevel].components
+        .sort((a, b) => a.order - b.order)
+        .forEach(component => {
+            const listItem = document.createElement('li');
+            const img = document.createElement('img');
+            img.src = `images/${component.type}.png`; // Asegúrate de que las imágenes estén en la carpeta 'images'
+            img.alt = component.type;
+            listItem.appendChild(img);
+            listItem.appendChild(document.createTextNode(`${component.type.charAt(0).toUpperCase() + component.type.slice(1)} -> ${component.order}`));
+            legendList.appendChild(listItem);
+        });
 }
 
 function movePlayer(deltaTime) {
@@ -235,17 +256,39 @@ function checkBarrelCollision() {
     });
 }
 
+const collectedList = document.getElementById('collectedList');
+
+function updateCollected() {
+    collectedList.innerHTML = '';
+    levels[currentLevel].components
+        .filter(component => component.collected)
+        .forEach(component => {
+            const listItem = document.createElement('li');
+            const img = document.createElement('img');
+            img.src = `images/${component.type}.png`; // Asegúrate de que las imágenes estén en la carpeta 'images'
+            img.alt = component.type;
+            listItem.appendChild(img);
+            listItem.appendChild(document.createTextNode(`${component.type.charAt(0).toUpperCase() + component.type.slice(1)}`));
+            collectedList.appendChild(listItem);
+        });
+}
+
 function checkCollection() {
     levels[currentLevel].components.forEach(component => {
         if (isColliding(player, component) && !component.collected) {
-            component.collected = true;
-            componentsCollected++;
-            score += 100;
-            updateScore();
-            document.getElementById('collectSound').play();
+            if (component.order === currentComponentIndex) {
+                component.collected = true;
+                componentsCollected++;
+                score += 100;
+                currentComponentIndex++;
+                updateScore();
+                updateCollected();
+                document.getElementById('collectSound')?.play();
+            } else {
+                updateMessage('¡Debes recoger los componentes en el orden correcto!');
+            }
         }
     });
-
     if (componentsCollected === levels[currentLevel].components.length) {
         levels[currentLevel].lightBulb.isOn = true;
         updateMessage('¡Todos los componentes recogidos! Enciende el foco!');
@@ -259,6 +302,7 @@ function checkLightBulbActivation() {
             alert('¡El foco se ha encendido! ¡Felicidades! Pasando al siguiente nivel.');
             currentLevel++;
             resetGame();
+            updateLegend(); // Actualizar la leyenda al cambiar de nivel
         } else {
             alert('¡Felicidades! Has completado todos los niveles.');
             currentLevel = 0;
@@ -303,6 +347,8 @@ function drawComponent(ctx, component) {
         case 'switch': drawSwitch(ctx, component); break;
         case 'motor': drawMotor(ctx, component); break;
         case 'cable': drawCable(ctx, component); break;
+        case 'resistor': drawResistor(ctx, component); break;
+        case 'capacitor': drawCapacitor(ctx, component); break;
         default: console.warn(`Tipo de componente desconocido: ${component.type}`); break;
     }
 }
@@ -346,6 +392,40 @@ function drawCable(ctx, component) {
     ctx.fillStyle = '#C0C0C0';
     ctx.fillRect(component.x - 5, component.y + (component.height / 2) - 5, 10, 10);
     ctx.fillRect(component.x + component.width - 5, component.y + (component.height / 2) - 5, 10, 10);
+}
+
+function drawResistor(ctx, component) {
+    ctx.fillStyle = '#8B4513'; // Color marrón para el cuerpo del resistor
+    ctx.fillRect(component.x + component.width / 4, component.y, component.width / 2, component.height); // Cuerpo del resistor
+    ctx.fillStyle = '#000000'; // Color negro para las bandas
+    ctx.fillRect(component.x + component.width / 4 + 2, component.y, 2, component.height); // Primera banda
+    ctx.fillRect(component.x + component.width / 2 - 2, component.y, 2, component.height); // Segunda banda
+    ctx.fillRect(component.x + 3 * component.width / 4 - 4, component.y, 2, component.height); // Tercera banda
+    ctx.strokeStyle = '#000000'; // Color negro para las líneas
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(component.x, component.y + component.height / 2);
+    ctx.lineTo(component.x + component.width / 4, component.y + component.height / 2); // Línea izquierda
+    ctx.moveTo(component.x + 3 * component.width / 4, component.y + component.height / 2);
+    ctx.lineTo(component.x + component.width, component.y + component.height / 2); // Línea derecha
+    ctx.stroke();
+}
+
+function drawCapacitor(ctx, component) {
+    ctx.fillStyle = '#0000FF'; // Color azul para el cuerpo del capacitor
+    ctx.fillRect(component.x + component.width / 4, component.y, component.width / 2, component.height); // Cuerpo del capacitor
+    ctx.strokeStyle = '#000000'; // Color negro para las líneas
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(component.x + component.width / 4, component.y);
+    ctx.lineTo(component.x + component.width / 4, component.y + component.height); // Línea izquierda
+    ctx.moveTo(component.x + 3 * component.width / 4, component.y);
+    ctx.lineTo(component.x + 3 * component.width / 4, component.y + component.height); // Línea derecha
+    ctx.moveTo(component.x, component.y + component.height / 2);
+    ctx.lineTo(component.x + component.width / 4, component.y + component.height / 2); // Línea horizontal izquierda
+    ctx.moveTo(component.x + 3 * component.width / 4, component.y + component.height / 2);
+    ctx.lineTo(component.x + component.width, component.y + component.height / 2); // Línea horizontal derecha
+    ctx.stroke();
 }
 
 function drawBarrel(ctx, barrel) {
@@ -435,6 +515,7 @@ function resetGame() {
     player.jumping = false;
     keys = {};
     componentsCollected = 0;
+    currentComponentIndex = 0;
     score = 0;
     timeLeft = 60;
     updateScore();
