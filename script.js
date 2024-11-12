@@ -38,8 +38,8 @@ const levels = [
     {
         // Nivel 1
         components: [
-            { x: 600, y: 300, width: 20, height: 20, color: 'red', collected: false, type: 'battery', order: 0 },
-            { x: 300, y: 250, width: 20, height: 20, color: 'blue', collected: false, type: 'cable', order: 1 }
+            { x: 600, y: 300, width: 30, height: 30, color: 'red', collected: false, type: 'battery', order: 0 },
+            { x: 300, y: 250, width: 25, height: 25, color: 'blue', collected: false, type: 'cable', order: 1 }
         ],
         barrels: [
             { x: 800, y: 450, width: 30, height: 30, speed: -3, initialX: 800 }
@@ -56,8 +56,8 @@ const levels = [
     {
         // Nivel 2
         components: [
-            { x: 700, y: 100, width: 20, height: 20, color: 'red', collected: false,type: 'battery', order: 0 },
-            { x: 250, y: 350, width: 20, height: 20, color: 'green', collected: false,type: 'cable', order: 1 }, // Centramos el objeto
+            { x: 700, y: 100, width: 30, height: 30, color: 'red', collected: false,type: 'battery', order: 0 },
+            { x: 250, y: 350, width: 25, height: 25, color: 'green', collected: false,type: 'cable', order: 1 }, // Centramos el objeto
             { x: 400, y: 250, width: 20, height: 20, color: 'blue', collected: false,type: 'resistor', order: 2 }
         ],
         barrels: [
@@ -75,8 +75,8 @@ const levels = [
     {
         // Nivel 3
         components: [
-            { x: 700, y: 100, width: 20, height: 20, color: 'red', collected: false,type: 'battery', order: 0  },
-            { x: 500, y: 350, width: 20, height: 20, color: 'orange', collected: false,type: 'cable', order: 1 },
+            { x: 700, y: 100, width: 30, height: 30, color: 'red', collected: false,type: 'battery', order: 0  },
+            { x: 500, y: 350, width: 25, height: 25, color: 'orange', collected: false,type: 'cable', order: 1 },
             { x: 400, y: 250, width: 20, height: 20, color: 'blue', collected: false,type: 'resistor', order: 2 },
             { x: 150, y: 450, width: 20, height: 20, color: 'green', collected: false,type: 'capacitor', order: 3  }
         ],
@@ -99,11 +99,11 @@ const levels = [
     {
         // Nivel 4 - Mayor dificultad con barriles rápidos y más componentes
         components: [
-            { x: 650, y: 150, width: 20, height: 20, color: 'red', collected: false,type: 'battery', order: 0 },
+            { x: 650, y: 150, width: 30, height: 30, color: 'red', collected: false,type: 'battery', order: 0 },
             { x: 300, y: 350, width: 20, height: 20, color: 'blue', collected: false,type: 'resistor', order: 2 },
             { x: 200, y: 250, width: 20, height: 20, color: 'green', collected: false,type: 'capacitor', order: 3 },
             { x: 400, y: 250, width: 20, height: 20, color: 'blue', collected: false,type: 'switch', order: 4 },
-            { x: 500, y: 450, width: 20, height: 20, color: 'yellow', collected: false,type: 'cable', order: 1 }
+            { x: 500, y: 450, width: 25, height: 25, color: 'yellow', collected: false,type: 'cable', order: 1 }
         ],
         barrels: [
             { x: 800, y: 450, width: 30, height: 30, speed: -5 }, // Barril rápido
@@ -120,11 +120,11 @@ const levels = [
     {
         // Nivel 5 - Dificultad máxima con múltiples barriles y mayor velocidad
         components: [
-            { x: 750, y: 120, width: 20, height: 20, color: 'red', collected: false,type: 'battery', order: 0  },
+            { x: 750, y: 120, width: 30, height: 30, color: 'red', collected: false,type: 'battery', order: 0  },
             { x: 450, y: 250, width: 20, height: 20, color: 'blue', collected: false,type: 'resistor', order: 2   },
             { x: 200, y: 450, width: 20, height: 20, color: 'green', collected: false,type: 'capacitor', order: 3  },
             { x: 350, y: 200, width: 20, height: 20, color: 'purple', collected: false,type: 'switch', order: 4  },
-            { x: 100, y: 400, width: 20, height: 20, color: 'orange', collected: false,type: 'cable', order: 1 },
+            { x: 100, y: 400, width: 25, height: 25, color: 'orange', collected: false,type: 'cable', order: 1 },
             { x: 500, y: 450, width: 20, height: 20, color: 'yellow', collected: false,type: 'motor', order: 5 }
         ],
         barrels: [
@@ -175,6 +175,11 @@ function startGame() {
     startTimer();
     gameStarted = true;
     requestAnimationFrame(gameLoop);
+}
+const currentLevelElement = document.getElementById('currentLevel');
+
+function updateCurrentLevel() {
+    currentLevelElement.textContent = currentLevel + 1;
 }
 
 function updateLegend() {
@@ -383,13 +388,13 @@ function drawMotor(ctx, component) {
 }
 
 function drawCable(ctx, component) {
-    ctx.strokeStyle = '#0000FF';
+    ctx.strokeStyle = '#ffff00';
     ctx.lineWidth = 8;
     ctx.beginPath();
     ctx.moveTo(component.x, component.y + component.height / 2);
     ctx.lineTo(component.x + component.width, component.y + component.height / 2);
     ctx.stroke();
-    ctx.fillStyle = '#C0C0C0';
+    ctx.fillStyle = '#fab714';
     ctx.fillRect(component.x - 5, component.y + (component.height / 2) - 5, 10, 10);
     ctx.fillRect(component.x + component.width - 5, component.y + (component.height / 2) - 5, 10, 10);
 }
@@ -494,7 +499,8 @@ function drawLightBulb(ctx, lightBulb) {
     ctx.lineWidth = 2;
     ctx.strokeRect(lightBulb.x + (lightBulb.width / 2 - 15), lightBulb.y + lightBulb.height - 15, 30, 15);
     if (lightBulb.isOn) {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        // ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.fillStyle ='rgba(255, 255, 0, 0.2)'
         ctx.beginPath();
         ctx.arc(lightBulb.x + lightBulb.width / 2, lightBulb.y + lightBulb.height / 2, lightBulb.width / 1.5, 0, Math.PI * 2);
         ctx.fill();
@@ -522,6 +528,7 @@ function resetGame() {
     updateMessage('');
     levels[currentLevel].components.forEach(component => component.collected = false);
     levels[currentLevel].lightBulb.isOn = false;
+    updateCurrentLevel();
 }
 
 function startTimer() {
